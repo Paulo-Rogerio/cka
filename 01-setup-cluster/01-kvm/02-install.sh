@@ -71,7 +71,6 @@ users:
   - name: paulo
     plain_text_passwd: 123456
     ssh_authorized_keys:
-      - publica-aqui
       - $(cat ~/.ssh/id_ed25519.pub)
     sudo: "ALL=(ALL) NOPASSWD:ALL"
     shell: /bin/bash
