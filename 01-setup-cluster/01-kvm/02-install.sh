@@ -2,12 +2,6 @@
 
 function install()
 {
-  export name=$1
-  export ram=$2
-  export vcpu=$3
-  export ip=$4
-  export image=$5
-
   network
   userdata
 
@@ -39,7 +33,7 @@ network:
     enp1s0:
       dhcp4: false
       addresses:
-        - ${ip}
+        - ${ip}/24
       gateway4: 10.100.100.1 
       nameservers:
         addresses: [8.8.8.8, 1.1.1.1]        
@@ -58,25 +52,16 @@ chpasswd:
   expire: false
   list: |
     root:123456
-    paulo:123456
 
 hostname: ${name}
 
 users:
   - name: root
-    plain_text_passwd: 123456
     ssh_authorized_keys:
       - $(cat ~/.ssh/id_ed25519.pub)
-
-  - name: paulo
-    plain_text_passwd: 123456
-    ssh_authorized_keys:
-      - $(cat ~/.ssh/id_ed25519.pub)
-    sudo: "ALL=(ALL) NOPASSWD:ALL"
-    shell: /bin/bash
 
 write_files:
-  - path: /root/.ssh/id_rsa
+  - path: /root/.ssh/id_ed25519
     owner: root:root
     permissions: 0o600
     defer: true
@@ -84,7 +69,21 @@ write_files:
     content: |
       $(base64 -w0 < ~/.ssh/id_ed25519)
 
-# do some package management
+  - path: /root/.ssh/id_ed25519.pub
+    owner: root:root
+    permissions: 0o644
+    defer: true
+    encoding: base64
+    content: |
+      $(base64 -w0 < ~/.ssh/id_ed25519.pub)
+
+  - path: /root/.ssh/config
+    owner: root:root
+    permissions: 0o644
+    defer: true
+    encoding: base64
+    content: SG9zdCAqCiAgU3RyaWN0SG9zdEtleUNoZWNraW5nIG5vCg==
+
 package_update: true
 package_upgrade: false
 
@@ -94,12 +93,41 @@ packages:
 runcmd:
   - [ sh, -c, "ssh-keyscan github.com >> /root/.ssh/known_hosts" ]
   - [ sh, -c, "git clone git@github.com:Paulo-Rogerio/cka.git /root/cka" ]
+  - |
+    cat <<'EOF' >> /etc/hosts
+$(
+    for ip in "${!members[@]}"; 
+    do
+      IFS='|' read -ra _members <<< "${members[$ip]}"
+      
+      for host in "${_members[@]}"; 
+      do
+        printf "    ${ip} %s.k8s.local %s\n" "${host}" "${host}"
+      done
+    done
+)
+    EOF
 EOF
 }
 
 #==================================
 # Call
 #==================================
-install "control" 2048  3  "10.100.100.10/24"  "jammy-server-cloudimg-amd64.img"
-install "worker"  4096  4  "10.100.100.11/24"  "jammy-server-cloudimg-amd64.img"
+declare -A members=()
 
+while read temp;
+do
+  name=$(awk '{print $1}' <<< ${temp})
+  ip=$(awk '{print $4}' <<< ${temp})
+  members["${ip}"]+="${name}|"
+done < hosts.txt
+
+while read temp;
+do
+  export name=$(awk '{print $1}' <<< ${temp})
+  export ram=$(awk '{print $2}' <<< ${temp})
+  export vcpu=$(awk '{print $3}' <<< ${temp})
+  export ip=$(awk '{print $4}' <<< ${temp})
+  export image=$(awk '{print $5}' <<< ${temp})
+  install
+done < hosts.txt

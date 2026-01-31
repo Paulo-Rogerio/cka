@@ -1,0 +1,2 @@
+master01  3072  4  10.100.100.10  jammy-server-cloudimg-amd64.img
+worker01  3072  4  10.100.100.20  jammy-server-cloudimg-amd64.img
