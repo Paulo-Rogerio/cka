@@ -8,5 +8,3 @@ export ETCDCTL_KEY=/etc/kubernetes/pki/etcd/etcd.key
 EOF
 
 source /root/etcdctl.env
-
-etcdctl member list --write-out=table
