@@ -2,4 +2,4 @@
 
 cd $(dirname $0)
 
-openssl x509 -in certs/etcd.pem -text
+openssl x509 -in etcd.pem -text
