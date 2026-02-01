@@ -9,3 +9,4 @@ source ./master/04-network.sh
 source ./master/05-taint.sh
 source ./master/06-metallb.sh
 source ./master/07-metrics-server.sh
+bash
