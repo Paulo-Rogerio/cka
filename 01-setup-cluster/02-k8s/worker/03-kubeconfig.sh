@@ -7,4 +7,4 @@ echo
 
 mkdir -p /home/vagrant/.kube
 mkdir -p /root/.kube
-cp -i /etc/kubernetes/admin.conf /root/.kube/config
+scp root@master01:/root/.kube/config /root/.kube/
