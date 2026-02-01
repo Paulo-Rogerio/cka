@@ -6,5 +6,4 @@ source ./01-upgrade.sh
 source ./02-common.sh
 source ./worker/03-kubeconfig.sh
 source ./worker/04-join.sh
-source ./worker/05-label.sh
 bash
