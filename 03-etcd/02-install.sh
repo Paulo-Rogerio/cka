@@ -8,7 +8,8 @@ export ETCD_VERSION=$(curl -sSL https://api.github.com/repos/etcd-io/etcd/releas
 export DOWNLOAD_URL="https://github.com/etcd-io/etcd/releases/download"
 
 curl -sSL ${DOWNLOAD_URL}/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VERSION}-linux-amd64.tar.gz
-tar xzvf /tmp/etcd-${ETCD_VERSION}-linux-amd64.tar.gz -C /tmp/etcd-download --strip-components=1
+mkdir -p /tmp/etcd-download
+tar -xzvf /tmp/etcd-${ETCD_VERSION}-linux-amd64.tar.gz -C /tmp/etcd-download --strip-components=1
 
 rm -f /tmp/etcd-${ETCD_VERSION}-linux-amd64.tar.gz
 mv /tmp/etcd-download/etcd* /usr/local/bin
