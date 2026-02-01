@@ -3,11 +3,11 @@
 source /root/etcdctl.env
 
 echo "---------"
-etcdctl get chave1 --prefix --write-out=table
+etcdctl get chave1 --prefix -w json | jq .
 
 echo "---------"
-etcdctl get chave2 --prefix --write-out=table
+etcdctl get chave2 --prefix -w json | jq .
 
 echo "---------"
-etcdctl get chave3 --prefix --write-out=table
+etcdctl get chave3 --prefix -w json | jq .
 echo "---------"
