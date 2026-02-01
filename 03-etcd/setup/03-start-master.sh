@@ -9,7 +9,7 @@ mkdir -p /etc/kubernetes/pki/etcd
 mkdir -p /var/lib/etcd
 chmod 700 /var/lib/etcd
 
-/usr/local/bin/etcd \
+nohup /usr/local/bin/etcd \
   --name ${NAME} \
   --client-cert-auth \
   --peer-client-cert-auth \
@@ -27,4 +27,4 @@ chmod 700 /var/lib/etcd
   --listen-client-urls https://${NODE}:2379,https://127.0.0.1:2379 \
   --initial-cluster-token estudos-etcd \
   --initial-cluster master00=https://master00:2380,master01=https://master01:2380,master02=https://master02:2380 \
-  --initial-cluster-state new
+  --initial-cluster-state new > /var/log/etcd.log 2>&1 &
