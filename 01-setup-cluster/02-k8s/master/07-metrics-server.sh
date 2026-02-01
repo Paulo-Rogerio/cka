@@ -22,6 +22,6 @@ helm repo update
 helm upgrade \
   --install \
   --namespace kube-system \
-  --create-namespace metrics-server metrics-server/metrics-server 
+  --create-namespace metrics-server metrics-server/metrics-server
 
 check_pod_running

@@ -1,0 +1,16 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: change-permissions
+        name: Change Permissions
+        entry: bash -c 'find . -type f -iname "*.sh" -exec chmod +x {} \;'
+        language: system
+        always_run: true
+        pass_filenames: false
