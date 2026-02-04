@@ -57,11 +57,12 @@ cat > etcd-csr.json <<EOF
   "hosts": [
     "localhost",
     "127.0.0.1",
+    "10.100.100.11",
+    "10.100.100.12",
+    "10.100.100.13",
     "master01",
     "master02",
-    "master03",
-    "master04",
-    "master05"
+    "master03"
   ],
   "key": {
     "algo": "rsa",
