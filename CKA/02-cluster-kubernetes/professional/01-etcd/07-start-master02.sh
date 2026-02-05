@@ -3,7 +3,8 @@
 NAME=$(hostname -s)
 
 mkdir -p /root/kubeadmcfg-etcd
-scp -r root@master01:/root/kubeadmcfg-etcd/${NAME} /root/kubeadmcfg-etcd
+
+scp -r root@master01:/root/kubeadmcfg-etcd/${NAME}/certs /root/kubeadmcfg-etcd
 
 mkdir -p /etc/kubernetes/pki/etcd/
 
