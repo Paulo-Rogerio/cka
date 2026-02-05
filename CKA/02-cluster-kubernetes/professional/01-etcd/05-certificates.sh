@@ -12,5 +12,4 @@ do
   mkdir -p /root/kubeadmcfg-etcd/${i}/certs
   cp -R /etc/kubernetes/pki /root/kubeadmcfg-etcd/${i}/certs
   find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete
-  find /root/kubeadmcfg-etcd/${i}/certs -name ca.key -type f -delete
 done
