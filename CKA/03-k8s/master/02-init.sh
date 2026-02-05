@@ -19,17 +19,19 @@ echo "======================================================"
 echo " Deploy Cluster "
 echo "======================================================"
 echo
-#
-# Unico Control Plane
+
+#============================================================
+# Single Node - Control Plane
 # kubeadm init \
 #   --apiserver-advertise-address=${IP_CONTROL_PLANE} \
 #   --apiserver-cert-extra-sans=${IP_CONTROL_PLANE} \
 #   --pod-network-cidr=${POD_CIDR} \
 #   --service-cidr=${SERVICE_CIDR} \
 #   --node-name ${NODENAME}
+#============================================================
 
 cat > kubeadm-config.yaml <<EOF
-apiVersion: kubeadm.k8s.io/v1
+apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
 kubernetesVersion: v${KUBERNETES_VERSION}
 
@@ -45,8 +47,8 @@ etcd:
       - https://master01:2379
       - https://master02:2379
     caFile: /etc/kubernetes/pki/etcd/ca.crt
-    certFile: /etc/kubernetes/pki/etcd/etcd.crt
-    keyFile: /etc/kubernetes/pki/etcd/etcd.key
+    certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
+    keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
 EOF
 
 kubeadm init --config kubeadm-config.yaml --upload-certs
