@@ -62,7 +62,7 @@ echo " Install Packages "
 echo "======================================================"
 echo
 apt-get update -y
-apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release containerd bash-completion
+apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release containerd bash-completion tree
 
 # config containerd
 echo "======================================================"
