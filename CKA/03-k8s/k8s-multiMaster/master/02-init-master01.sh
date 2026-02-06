@@ -22,28 +22,6 @@ echo " Deploy Cluster "
 echo "======================================================"
 echo
 
-# cat > kubeadm-config.yaml <<EOF
-# apiVersion: kubeadm.k8s.io/v1beta4
-# kind: ClusterConfiguration
-# kubernetesVersion: v${KUBERNETES_VERSION}
-
-# controlPlaneEndpoint: "${IP_CONTROL_PLANE}:6443"
-
-# networking:
-#   podSubnet: ${POD_CIDR}
-#   serviceSubnet: ${SERVICE_CIDR}
-
-# etcd:
-#   external:
-#     endpoints:
-#       - https://master01:2379
-#       - https://master02:2379
-#     caFile: /etc/kubernetes/pki/etcd/ca.crt
-#     certFile: /etc/kubernetes/pki/etcd/etcd.crt
-#     keyFile: /etc/kubernetes/pki/etcd/etcd.key
-# EOF
-
-
 cat > kubeadm-config.yaml <<EOF
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: InitConfiguration
@@ -69,14 +47,18 @@ etcd:
       - https://master01:2379
       - https://master02:2379
     caFile: /etc/kubernetes/pki/etcd/ca.crt
-    certFile: /etc/kubernetes/pki/etcd/etcd.crt
-    keyFile: /etc/kubernetes/pki/etcd/etcd.key
+    certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
+    keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
 EOF
-
 
 kubeadm init --config kubeadm-config.yaml --upload-certs
 mkdir -p /root/.kube
 cp -i /etc/kubernetes/admin.conf /root/.kube/config
+
+echo "======================================================"
+echo " Generate Script Join Member "
+echo "======================================================"
+echo
 
 mkdir -p ${JOIN_FILE}
 touch ${JOIN_FILE}/join.sh
