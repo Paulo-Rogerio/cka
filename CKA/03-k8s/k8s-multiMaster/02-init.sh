@@ -127,6 +127,8 @@ EOF
 
   kubeadm join --config kubeadm-config.yaml
   rm -f kubeadm-config.yaml
+  mkdir -p /root/.kube
+  scp -r root@master01:/root/.kube/config /root/.kube/config
 
 }
 
