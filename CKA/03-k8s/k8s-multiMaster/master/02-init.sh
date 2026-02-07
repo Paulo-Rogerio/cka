@@ -72,6 +72,9 @@ function _master() {
   echo "======================================================"
   echo
 
+  scp -r root@master01:/root/join-cluster /root
+  source /root/join-cluster/join.env
+
   cat > kubeadm-config.yaml <<EOF
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: JoinConfiguration
@@ -89,9 +92,6 @@ controlPlane:
 nodeRegistration:
   name: ${NODENAME}
 EOF
-
-  scp -r root@master01:/root/join-cluster /root
-  scp root@master01:/root/.kube/config /root/.kube/
 
   kubeadm join --config kubeadm-config.yaml
 
