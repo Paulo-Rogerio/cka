@@ -78,6 +78,8 @@ sh 02-list-members.sh
 
 Observe que para esse tipo de manutenção os certificados são **outros**. O endpoint **master02**, foi removido, por isso não foi informado na string de conexão.
 
+#### O disparo do backup pode ser executado em qualquer membro. Afim de testificar, o backup será executado no node ( master03 )
+
 ```bash
 cat > /root/etcdctl.env <<EOF
 export ETCDCTL_ENDPOINTS=https://master01:2379,https://master03:2379
