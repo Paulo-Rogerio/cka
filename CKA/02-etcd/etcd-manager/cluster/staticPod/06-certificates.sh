@@ -9,9 +9,9 @@ scp -r root@master01:/etc/kubernetes/pki/etcd/ca.key /etc/kubernetes/pki/etcd/ca
 
 for i in ${HOSTS[@]}
 do
+  mkdir -p /root/kubeadmcfg-etcd/${i}
   kubeadm init phase certs etcd-server --config=/root/kubeadmcfg-etcd/${i}/kubeadmcfg.yaml
   kubeadm init phase certs etcd-peer --config=/root/kubeadmcfg-etcd/${i}/kubeadmcfg.yaml
   kubeadm init phase certs etcd-healthcheck-client --config=/root/kubeadmcfg-etcd/${i}/kubeadmcfg.yaml
   kubeadm init phase certs apiserver-etcd-client --config=/root/kubeadmcfg-etcd/${i}/kubeadmcfg.yaml
-  mkdir -p /root/kubeadmcfg-etcd/${i}/certs
 done
