@@ -10,8 +10,8 @@ Para esse laboratório é esperado que o **ETCD** rode fora do cluster.
 # Deploy Kubernetes Single Control Plane
 
 ```bash
-02-k8s/k8s-singleNode/deploy-master.sh
-02-k8s/k8s-singleNode/deploy-worker.sh
+02-k8s/singleNode/deploy-master.sh
+02-k8s/singleNode/deploy-worker.sh
 ```
 
 # Gerar Token
