@@ -72,3 +72,21 @@ sh 02-list-members.sh
 | dea3c1946426d2a3 | started | master03 | https://10.100.100.13:2380 | https://10.100.100.13:2379 |      false |
 +------------------+---------+----------+----------------------------+----------------------------+------------+
 ```
+
+
+## Backup
+
+Observe que para esse tipo de manutenção os certificados são **outros**. O endpoint **master02**, foi removido, por isso não foi informado na string de conexão.
+
+```bash
+cat > /root/etcdctl.env <<EOF
+export ETCDCTL_ENDPOINTS=https://master01:2379,https://master03:2379
+export ETCDCTL_CACERT=/etc/kubernetes/pki/etcd/ca.crt
+export ETCDCTL_CERT=/etc/kubernetes/pki/etcd/healthcheck-client.crt
+export ETCDCTL_KEY=/etc/kubernetes/pki/etcd/healthcheck-client.key
+EOF
+
+source /root/etcdctl.env
+mkdir -p /backup
+etcdctl snapshot save /backup/etcd-$(date +%F-%H%M).db
+```
