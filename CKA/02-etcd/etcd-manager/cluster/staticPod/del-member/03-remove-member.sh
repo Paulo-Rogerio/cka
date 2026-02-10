@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 source ./01-env.sh
-source /root/etcdctl.env
 
 [[ -z $1 ]] && echo "Deve-se informar o Id do membro. Ex: ( 8211f1d0f64f3269 )" && exit 1;
 
