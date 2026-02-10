@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+mkdir -p /backup
 cp /etc/kubernetes/manifests/etcd.yaml /backup
 #
 # \1 ( Retrovisor ) => Agrupa o item capturado (--initial-cluster=)
