@@ -12,4 +12,4 @@ mkdir -p /tmp/etcd-download
 tar -xzvf /tmp/etcd-${ETCD_VERSION}-linux-amd64.tar.gz -C /tmp/etcd-download --strip-components=1
 
 rm -f /tmp/etcd-${ETCD_VERSION}-linux-amd64.tar.gz
-mv /tmp/etcd-download/etcdctl /usr/local/bin
+mv /tmp/etcd-download/* /usr/local/bin
