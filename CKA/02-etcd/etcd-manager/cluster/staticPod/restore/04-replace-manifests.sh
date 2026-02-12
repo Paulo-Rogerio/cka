@@ -26,7 +26,7 @@ do
       mkdir -p /backup
       cp /etc/kubernetes/manifests/etcd.yaml /backup
       sed -i -E "s|(--initial-cluster=)[^\"]*|\1${endpoints}|" /etc/kubernetes/manifests/etcd.yaml
-      sed -i -E 's|(--initial-cluster-state=)[^\"]*|\1new|' /etc/kubernetes/manifests/etcd.yaml
+      sed -i -E 's|(--initial-cluster-state=)[^"]*|\1new|' /etc/kubernetes/manifests/etcd.yaml
     fi
   done
 done
