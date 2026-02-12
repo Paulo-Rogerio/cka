@@ -2,6 +2,9 @@
 
 source ./01-env.sh
 
-etcdctl put "chave1" "value1"
-etcdctl put "chave2" "value2"
-etcdctl put "chave3" "value3"
+for i in {1..10}
+do
+  etcdctl put "chave${i}" "value{i}"
+  etcdctl put "chave${i}" "value{i}"
+  etcdctl put "chave${i}" "value{i}"
+done

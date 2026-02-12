@@ -2,4 +2,5 @@
 
 source ./01-env.sh
 
-etcdctl del chave3
+etcdctl del chave10
+etcdctl del chave9
