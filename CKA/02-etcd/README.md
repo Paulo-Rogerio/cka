@@ -133,11 +133,33 @@ bash 02-list-members.sh
 
 Os scripts para manipulação do **cluster** ficam em: */root/kubernetes-certifications/CKA/02-etcd/etcd-manager/cluster/systemd*
 
+Essa implementação baseada em **SystemD** é apenas para clarificar como se comporta o serviço. Não vou detalhar procedimentos aqui, visto que para **CKA** a implementação cobrada e baseada em **POD**
+
 ## 4) ETCD StaticPod
 
-Examinar saida de logs
+
+Após deployado as Vms conecte-se em (**master01 e master02**). Para esse laboratório vamos deployar o **etcd** interno, mantido pelo e gerido pelo **kubernetes** via **StaticPod**.
+
+
+Conecte-se na master01...
 
 ```bash
+ssh root@master01
+cd kubernetes-certifications/CKA/02-etcd/etcd-staticPod/
+bash deploy.sh
+crictl ps -a | grep etcd
+crictl logs 992e3500eddf6
+systemctl status kubelet
+```
+
+#### OBS.: O mesmo script atende ambas implementações
+
+Conecte-se na master02 e execute procedimento semelhante
+
+```bash
+ssh root@master02
+cd kubernetes-certifications/CKA/02-etcd/etcd-staticPod/
+bash deploy.sh
 crictl ps -a | grep etcd
 crictl logs 992e3500eddf6
 systemctl status kubelet
