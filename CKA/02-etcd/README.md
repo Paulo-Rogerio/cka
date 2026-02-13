@@ -3,6 +3,7 @@
 - [1) Vms Requisitos](#1-vms-requisitos)
 - [2) Vms Startup](#2-vms-startup)
 - [3) ETCD SystemD](#3-etcd-systemd)
+- [4) ETCD StaticPod](#4-etcd-staticpod)
 
 
 ## 1) Vms Requisitos
@@ -74,17 +75,65 @@ Esse utilitário já cria todo os requisitos necessários.
 sh deploy.sh
 ```
 
+Conecte-se na Vm recém criada.
+
 ```bash
 ssh root@master01
 ```
 
 #### Removendo Vms
 
+Remova as Vms após o término do laboratório.
+
 ```bash
 sh remove.sh
 ```
 
 ## 3) ETCD SystemD
+
+Para fins didáticos temos 2 opções para rodar o **etcd**: Como serviço **SystemD**, ou como **Static Pod**. Para entender como funciona o serviço foi criado essas 2 implementações.
+
+Após deployado as Vms conecte-se em (**master01 e master02**).
+
+Isso irá deployar o **etcd** externo , mantido pelo S.O e gerido pelo **systemd**.
+
+```bash
+ssh root@master01
+cd kubernetes-certifications/CKA/02-etcd/etcd-systemd/
+bash deploy-master01.sh
+systemctl status etcd
+```
+
+Conecte-se na master02 e execute procedimento semelhante
+
+```bash
+ssh root@master02
+cd kubernetes-certifications/CKA/02-etcd/etcd-systemd/
+bash deploy-master02.sh
+systemctl status etcd
+```
+
+#### OBS.: Subimos 3 Vms , mas o etcd foi instalado em apenas 2 membros. Isso foi proposital, para aprendermos manipular o ETCD.
+
+A manipulação dos dados no ETCD pode acontecer em qualquer node.
+
+Os scripts para manipulação dos **dados** ficam em: */root/kubernetes-certifications/CKA/02-etcd/etcd-manager/data*
+
+```bash
+cd /root/kubernetes-certifications/CKA/02-etcd/etcd-manager/data
+bash 02-list-members.sh
+
++------------------+---------+----------+-----------------------+----------------------------+------------+
+|        ID        | STATUS  |   NAME   |      PEER ADDRS       |        CLIENT ADDRS        | IS LEARNER |
++------------------+---------+----------+-----------------------+----------------------------+------------+
+| 3713bd59c3918478 | started | master01 | https://master01:2380 | https://10.100.100.11:2379 |      false |
+| 43450b1d21f3b96a | started | master02 | https://master02:2380 | https://10.100.100.12:2379 |      false |
++------------------+---------+----------+-----------------------+----------------------------+------------+
+```
+
+Os scripts para manipulação do **cluster** ficam em: */root/kubernetes-certifications/CKA/02-etcd/etcd-manager/cluster/systemd*
+
+## 4) ETCD StaticPod
 
 Examinar saida de logs
 
