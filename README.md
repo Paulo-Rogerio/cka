@@ -3,7 +3,7 @@
 - [Deploy](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-deploy.md)
 
   - Deploy KVM
-  -  Etcd Systemd
+  - Etcd Systemd
   - Etcd StaticPod
 
 - [Manager Data](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-data.md)
@@ -22,3 +22,7 @@
 # 🚀 Learn Kubernetes
 
 - [Kubernetes](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/README.md)
+
+- [Deploy](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-deploy.md)
+
+  - Deploy KVM
