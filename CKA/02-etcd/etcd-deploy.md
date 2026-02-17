@@ -146,7 +146,9 @@ Conecte-se na master01...
 ```bash
 ssh root@master01
 cd kubernetes-certifications/CKA/02-etcd/etcd-staticPod/
+
 bash deploy.sh
+
 crictl ps -a | grep etcd
 crictl logs 992e3500eddf6
 systemctl status kubelet
@@ -159,7 +161,9 @@ Conecte-se na master02 e execute procedimento semelhante
 ```bash
 ssh root@master02
 cd kubernetes-certifications/CKA/02-etcd/etcd-staticPod/
+
 bash deploy.sh
+
 crictl ps -a | grep etcd
 crictl logs 992e3500eddf6
 systemctl status kubelet
