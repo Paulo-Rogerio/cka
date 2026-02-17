@@ -1,4 +1,4 @@
-# 🚀 Manager Members Etcd
+# 🚀 Adicionar Member Etcd
 
 - [1) ETCD StaticPod](#1-etcd-staticpod)
 - [1.1) Add Member](#11-add-member)
