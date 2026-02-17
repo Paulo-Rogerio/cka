@@ -152,6 +152,13 @@ bash deploy.sh
 crictl ps -a | grep etcd
 crictl logs 992e3500eddf6
 systemctl status kubelet
+
++------------------+---------+----------+-----------------------+----------------------------+------------+
+|        ID        | STATUS  |   NAME   |      PEER ADDRS       |        CLIENT ADDRS        | IS LEARNER |
++------------------+---------+----------+-----------------------+----------------------------+------------+
+| 564yru980out75ut | started | master01 | https://master01:2380 | https://10.100.100.11:2379 |      false |
+| 7rurjt778iuo98tg | started | master02 | https://master02:2380 | https://10.100.100.12:2379 |      false |
++------------------+---------+----------+-----------------------+----------------------------+------------+
 ```
 
 #### OBS.: O mesmo script atende ambas implementações
@@ -167,4 +174,11 @@ bash deploy.sh
 crictl ps -a | grep etcd
 crictl logs 992e3500eddf6
 systemctl status kubelet
+
++------------------+---------+----------+-----------------------+----------------------------+------------+
+|        ID        | STATUS  |   NAME   |      PEER ADDRS       |        CLIENT ADDRS        | IS LEARNER |
++------------------+---------+----------+-----------------------+----------------------------+------------+
+| 564yru980out75ut | started | master01 | https://master01:2380 | https://10.100.100.11:2379 |      false |
+| 7rurjt778iuo98tg | started | master02 | https://master02:2380 | https://10.100.100.12:2379 |      false |
++------------------+---------+----------+-----------------------+----------------------------+------------+
 ```
