@@ -10,10 +10,13 @@
 
   - Manipular Dados
 
-- [Manager Cluster](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-cluster.md)
+- [Members Cluster](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-members.md)
 
   - Inserir Membro
   - Remover Membro
+
+- [Backup Cluster](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-backup.md)
+
   - Backup
   - Restore
 
