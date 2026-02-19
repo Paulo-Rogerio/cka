@@ -7,11 +7,16 @@ function output(){
 }
 
 function check_pod_running(){
+    deployment=$1
+    namespace=$2
     todo=true
+
+    [[ -z ${deployment} || -z ${namespace} ]] && echo "Namespace e Deployment não informados" && exit 1
+
     while ${todo};
     do
-      podsWorking=$(kubectl get pod -A -o custom-columns="STATUS:.status.phase" | grep -v STATUS | egrep -vc "Running|Succeeded")
-      [[ ${podsWorking} == 0 ]] && export todo=false
+      kubectl rollout status deployment/${deployment} -n ${namespace} &> /dev/null
+      [[ $? == 0 ]] && export todo=false
       echo "Waiting Pod Health..."
       sleep 10
     done
@@ -28,7 +33,8 @@ helm install metallb metallb/metallb \
   --namespace metallb-system \
   --create-namespace
 
-check_pod_running
+# Check
+check_pod_running metallb-controller metallb-system
 
 export cidr=$(ip -4 addr show enp1s0 | awk '/inet /{print $2}' | cut -d/ -f1)
 output "CIDR...............: ${cidr}"
