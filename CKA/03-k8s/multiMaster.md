@@ -2,7 +2,7 @@
 
 - [1) Vms Requisitos](#1-vms-requisitos)
 - [2) Vms Startup](#2-vms-startup)
-- [3) Deploy Kubernetes Single Master](#3-deploy-kubernetes-single-master)
+- [3) Deploy Kubernetes Multi Master](#3-deploy-kubernetes-multi-master)
 - [4) Informações Sobre Cluster](#4-informações-sobre-cluster)
 
 
@@ -54,8 +54,9 @@ Todas as vms tem uma senha default já definida no cloud-init **123456**.
 #===========================================================================
 # Vm Name  |  Ram  | vCPU  |     Ip        |   Imagem Cloud Init
 #===========================================================================
-master01      2048    3       10.100.100.11    jammy-server-cloudimg-amd64.img
-worker01      2048    3       10.100.100.20    jammy-server-cloudimg-amd64.img
+master01     2048     3      10.100.100.11   jammy-server-cloudimg-amd64.img
+master02     2048     3      10.100.100.12   jammy-server-cloudimg-amd64.img
+worker01     2048     3      10.100.100.20   jammy-server-cloudimg-amd64.img
 #===========================================================================
 # Estudos ETCD
 #===========================================================================
@@ -90,19 +91,15 @@ sh remove.sh
 
 ## 3) Deploy Kubernetes Single Master
 
-Após deployado as Vms conecte-se em (**master01 e worker01**).
+Após deployado as Vms conecte-se em (**master01, master02 e worker01**).
 
 Essa implementação irá deployar o **etcd** interno , mantido e gerido pelo **kubelet**.
 
-Será perguntando como o **etcd** irá rodar, na ocasião estou rodando com etcd **interno**. Tem um material falando apenas de **ETCD**, consulte o [Menu](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/README.md).
 
 ```bash
 ssh root@master01
-cd /root/kubernetes-certifications/CKA/03-k8s/singeMaster
-bash deploy-master.sh
-
-Como o Kubernetes ira usar o etcd? (1) ETCD interno. (2) ETCD external : 1
-Usando ETCD: Interno
+cd /root/kubernetes-certifications/CKA/03-k8s/multiMaster
+bash deploy.sh
 
 kubectl get nodes
 
@@ -110,16 +107,30 @@ NAME       STATUS   ROLES           AGE     VERSION
 master01   Ready    control-plane   5m37s   v1.34.4
 ```
 
-Após deployado o **master01** ,conecte-se na **worker01** e execute procedimento semelhante.
+Após deployado o **master01** ,conecte-se na **master02** e execute procedimento semelhante.
 
 ```bash
-ssh root@worker01
-cd /root/kubernetes-certifications/CKA/03-k8s/singeMaster
-bash deploy-worker.sh
+ssh root@master02
+cd /root/kubernetes-certifications/CKA/03-k8s/multiMaster
+bash deploy.sh
 kubectl get nodes
 
 NAME       STATUS   ROLES           AGE     VERSION
 master01   Ready    control-plane   14m     v1.34.4
+master02   Ready    control-plane   14m     v1.34.4
+```
+
+Após deployado as **masters** ,conecte-se na **worker01** e execute procedimento semelhante.
+
+```bash
+ssh root@worker01
+cd /root/kubernetes-certifications/CKA/03-k8s/multiMaster
+bash deploy.sh
+kubectl get nodes
+
+NAME       STATUS   ROLES           AGE     VERSION
+master01   Ready    control-plane   14m     v1.34.4
+master02   Ready    control-plane   14m     v1.34.4
 worker01   Ready    <none>          6m41s   v1.34.4
 ```
 
