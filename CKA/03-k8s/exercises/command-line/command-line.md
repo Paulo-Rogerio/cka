@@ -5,6 +5,17 @@ k config get-contexts
 k config set-context <name-context> --namespace='<namespace>'
 k config set-context kubernetes-admin@kubernetes --namespace='metallb-system'
 k config set-context kubernetes-admin@kubernetes --namespace=''
+
+# Aplica-se ao contexto current
+k config set-context --current --namespace=default
+
+# Merge 2 kubeconfig
+kubectl config view --flatten
+
+KUBECONFIG=~/.kube/config:~/.kube/kube_outro_cluster_config kubectl config view --flatten > ~/.kube/kube-merge
+
+# AWS ( EKS )
+aws eks update-kubeconfig --dry-run --name paulo --region us-east-2
 ```
 
 # 🚀 Command Line - Nodes
