@@ -2,7 +2,8 @@
 
 - [1) Vms Requisitos](#1-vms-requisitos)
 - [2) Vms Startup](#2-vms-startup)
-- [3) K8s Deploy](#3-k8s-deploy)
+- [3) Deploy Kubernetes Single Master](#3-deploy-kubernetes-single-master)
+- [4) Informações Sobre Cluster](#4-informações-sobre-cluster)
 
 
 ## 1) Vms Requisitos
@@ -87,26 +88,60 @@ Remova as Vms após o término do laboratório.
 sh remove.sh
 ```
 
-## 3) ETCD SystemD
+## 3) Deploy Kubernetes Single Master
 
-Para fins didáticos temos 2 opções para rodar o **etcd**: Como serviço **SystemD**, ou como **Static Pod**. Para entender como funciona o serviço foi criado essas 2 implementações.
-
-Após deployado as Vms conecte-se em (**master01 e master02**).
+Após deployado as Vms conecte-se em (**master01 e worker01**).
 
 Isso irá deployar o **etcd** externo , mantido pelo S.O e gerido pelo **systemd**.
 
+Será perguntando como o **etcd** irá rodar, na ocasião estou rodando com etcd **interno**. Tem um material falando apenas de **ETCD**, consulte o [Menu](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/README.md).
+
 ```bash
 ssh root@master01
-cd kubernetes-certifications/CKA/02-etcd/etcd-systemd/
-bash deploy-master01.sh
-systemctl status etcd
+cd /root/kubernetes-certifications/CKA/03-k8s/singeMaster
+bash deploy-master.sh
+
+Como o Kubernetes ira usar o etcd? (1) ETCD interno. (2) ETCD external : 1
+Usando ETCD: Interno
+
+kubectl get nodes
+
+NAME       STATUS   ROLES           AGE     VERSION
+master01   Ready    control-plane   5m37s   v1.34.4
 ```
 
-Conecte-se na master02 e execute procedimento semelhante
+Após deployado o **master01** ,conecte-se na **worker01** e execute procedimento semelhante.
 
 ```bash
-ssh root@master02
-cd kubernetes-certifications/CKA/02-etcd/etcd-systemd/
-bash deploy-master02.sh
-systemctl status etcd
+ssh root@worker01
+cd /root/kubernetes-certifications/CKA/03-k8s/singeMaster
+bash deploy-worker.sh
+kubectl get nodes
+
+NAME       STATUS   ROLES           AGE     VERSION
+master01   Ready    control-plane   14m     v1.34.4
+worker01   Ready    <none>          6m41s   v1.34.4
+```
+
+## 4) Informações Sobre Cluster
+
+### Versão do Cliente Kubernetes instalado
+
+```bash
+kubeadm version -o short
+```
+
+### Manifesto YAML padrão usado pelo Kubeadm init
+
+```bash
+kubeadm config print init-defaults
+```
+
+### Gerar Token
+```bash
+echo "$(kubeadm token create --print-join-command)" > join.sh
+
+kubeadm join 10.100.100.10:6443 \
+  --token yw814a.mk47hgqt1yayq26k \
+  --discovery-token-ca-cert-hash sha256:7613f7a62eb387ebc300bdd56bcf35782cbf0fea5bc7e622d58bb2b364b08730
 ```

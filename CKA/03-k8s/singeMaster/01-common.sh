@@ -34,7 +34,7 @@ echo \
 apt-get update -y
 apt-get install -y gpg
 
-# helm install
+# Helm install
 echo "======================================================"
 echo " Helm Install"
 echo "======================================================"
@@ -44,7 +44,7 @@ chmod +x /tmp/get_helm.sh
 bash /tmp/get_helm.sh
 rm -f /tmp/get_helm.sh
 
-# repo kubeadmn
+# Repo kubeadmn
 echo "======================================================"
 echo " Repo Kubeadm "
 echo "======================================================"
@@ -64,7 +64,7 @@ echo
 apt-get update -y
 apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release containerd bash-completion
 
-# config containerd
+# Config containerd
 echo "======================================================"
 echo " Containerd Modulos "
 echo "======================================================"
