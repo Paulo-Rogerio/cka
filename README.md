@@ -1,14 +1,18 @@
 # 🚀 Learn ETCD
 
 - [Deploy](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-deploy.md)
-- [Gerenciar Dados](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-data.md)
-- [Adicionar Novo Membro](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-new-members.md)
+- [Manager Data](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-data.md)
+- [Add New Member](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-new-members.md)
 - [Backup Cluster](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-backup.md)
-- [Delete Membro](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-delete-member.md)
+- [Delete Member](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-delete-member.md)
 - [Restore Cluster](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/etcd-restore-cluster.md)
-- [Exercícios](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/exercises/exercises.md)
+- [Exercises](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/02-etcd/exercises/exercises.md)
+
+# 🚀 Deploy Kubernetes
+
+- [Single Master](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/singleMaster.md)
+- [Multi Master](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/multiMaster.md)
 
 # 🚀 Learn Kubernetes
 
-- [Deploy K8s Single Master](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/singleMaster.md)
-- [Deploy K8s Multi Master](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/multiMaster.md)
+- [Command Line](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/exercises/command-line/command-line.md)

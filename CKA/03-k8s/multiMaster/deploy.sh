@@ -11,7 +11,6 @@ then
   source ../deployments/01-cni.sh
   source ../deployments/02-taint.sh
   source ../deployments/03-metallb.sh
-  source ../deployments/04-metrics-server.sh
 else
   source ./01-common.sh
   source ./03-init.sh

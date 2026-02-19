@@ -104,7 +104,7 @@ bash deploy.sh
 kubectl get nodes
 
 NAME       STATUS   ROLES           AGE     VERSION
-master01   Ready    control-plane   5m37s   v1.34.4
+master01   Ready    control-plane   47s   v1.34.4
 ```
 
 Após deployado o **master01** ,conecte-se na **master02** e execute procedimento semelhante.
@@ -116,8 +116,8 @@ bash deploy.sh
 kubectl get nodes
 
 NAME       STATUS   ROLES           AGE     VERSION
-master01   Ready    control-plane   14m     v1.34.4
-master02   Ready    control-plane   14m     v1.34.4
+master01   Ready    control-plane   3m58s   v1.34.4
+master02   Ready    control-plane   23s     v1.34.4
 ```
 
 Após deployado as **masters** ,conecte-se na **worker01** e execute procedimento semelhante.
@@ -129,9 +129,10 @@ bash deploy.sh
 kubectl get nodes
 
 NAME       STATUS   ROLES           AGE     VERSION
-master01   Ready    control-plane   14m     v1.34.4
-master02   Ready    control-plane   14m     v1.34.4
-worker01   Ready    <none>          6m41s   v1.34.4
+NAME       STATUS   ROLES           AGE     VERSION
+master01   Ready    control-plane   6m56s   v1.34.4
+master02   Ready    control-plane   3m21s   v1.34.4
+worker01   Ready    <none>          63s     v1.34.4
 ```
 
 ## 4) Informações Sobre Cluster

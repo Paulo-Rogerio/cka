@@ -1,0 +1,76 @@
+# 🚀 Command Line - Contexts
+
+```bash
+k config get-contexts
+k config set-context <name-context> --namespace='<namespace>'
+k config set-context kubernetes-admin@kubernetes --namespace='metallb-system'
+k config set-context kubernetes-admin@kubernetes --namespace=''
+```
+
+# 🚀 Command Line - Nodes
+
+```bash
+k get nodes
+
+# Ip Node
+k get nodes -o wide
+
+# Manifestos do Node
+k get nodes -o yaml
+
+# Precisa-se no Metric Server.
+# O fato de ter o MetalLB deployado permite export ExternalIP
+k top nodes
+
+helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+helm repo update
+helm upgrade \
+  --install \
+  --namespace kube-system \
+  --create-namespace metrics-server metrics-server/metrics-server \
+  --set-string args[0]=--kubelet-insecure-tls \
+  --set-string args[1]="--kubelet-preferred-address-types=InternalIP\,Hostname\,ExternalIP"
+
+# Definir Label ( Rótulo )
+nodes=$(kubectl get nodes --no-headers | awk '$3 == "<none>" {print $1}')
+for i in ${nodes[@]}
+do
+  kubectl label node ${i} node-role.kubernetes.io/worker=""
+done
+
+# Não schedular nenhum pod no worker
+kubectl cordon worker01
+kubectl uncordon worker01
+```
+
+# 🚀 Command Line - Pods
+
+```bash
+k get pod
+
+# Lista todos Namespaces
+k get pod -A
+
+k get pod -A --show-labels
+k get pod -n kube-system etcd-master01
+k get pod -A -l <label>=<value>
+k get pod -A -l component=etcd
+
+# Ip Pods.
+k get pod -A -o wide
+
+# "Assistindo" mudanças em tempo real.
+k get pod -A -w
+
+k edit pod -n kube-system etcd-master01
+k describe pod -n kube-system etcd-master01
+k delete pod -n kube-system etcd-master01
+
+k logs pod -n <namespace> <pod>
+k logs pod -n kube-system etcd-master01
+
+# Conectar no container
+k exec -it -n <namespace> <pod> -- bash
+k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash
+k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash -c "pwd; ls"
+```
