@@ -57,6 +57,9 @@ kubectl uncordon worker01
 # 🚀 Command Line - Pods
 
 ```bash
+# Nivel de verbosidade + alto
+k get pods -A -v9
+
 k get pod
 
 # Lista todos Namespaces
