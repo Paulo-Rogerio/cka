@@ -1,6 +1,5 @@
-#----------------------------
+
 # 🚀 Command Line - Contexts
-#----------------------------
 
 ```bash
 k config get-contexts
@@ -20,9 +19,7 @@ KUBECONFIG=~/.kube/config:~/.kube/kube_outro_cluster_config kubectl config view 
 aws eks update-kubeconfig --dry-run --name paulo --region us-east-2
 ```
 
-#----------------------------
 # 🚀 Command Line - Nodes
-#----------------------------
 
 ```bash
 k get nodes
