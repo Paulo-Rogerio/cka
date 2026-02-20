@@ -88,6 +88,10 @@ k get pod
 # Lista todos Namespaces
 k get pod -A
 
+# Pegando Por tipo
+k get pod -n ingress-nginx ingress-nginx-controller-5f4f4d9787-d6h9s -o json
+k get pod -n ingress-nginx ingress-nginx-controller-5f4f4d9787-d6h9s -o yaml
+
 k get pod -A --show-labels
 k get pod -n kube-system etcd-master01
 k get pod -A -l <label>=<value>
@@ -110,4 +114,25 @@ k logs pod -n kube-system etcd-master01
 k exec -it -n <namespace> <pod> -- bash
 k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash
 k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash -c "pwd; ls"
+```
+
+# 🚀 Create Object
+
+```bash
+
+# Criar Resources
+k apply -f <file-name.yml>
+
+# Pega tudo do diretorio current
+k apply -f .
+k apply -f ./<dir>
+
+# Criar de um URL
+k apply -f https://<url>
+
+# Retorna uma lista de objetos e se eles são Globais ou vinculados a um namespace
+kubectl api-resources
+
+# Cria o Pod , e ao ser encerrado, já o deleta
+k run <pod-name> --image=<image-name> --rm
 ```
