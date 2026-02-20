@@ -1,4 +1,6 @@
+#----------------------------
 # 🚀 Command Line - Contexts
+#----------------------------
 
 ```bash
 k config get-contexts
@@ -18,7 +20,9 @@ KUBECONFIG=~/.kube/config:~/.kube/kube_outro_cluster_config kubectl config view 
 aws eks update-kubeconfig --dry-run --name paulo --region us-east-2
 ```
 
+#----------------------------
 # 🚀 Command Line - Nodes
+#----------------------------
 
 ```bash
 k get nodes
@@ -60,6 +64,28 @@ kubectl uncordon worker01
 # Nivel de verbosidade + alto
 k get pods -A -v9
 
+# Consulmindo a API
+kubectl config view --raw -o jsonpath='{.users[0].user.client-certificate-data}' | base64 -d > /tmp/cert.crt
+kubectl config view --raw -o jsonpath='{.users[0].user.client-key-data}' | base64 -d > /tmp/cert.key
+curl \
+  -k \
+  --cert /tmp/cert.crt \
+  --key /tmp/cert.key \
+  --cacert /etc/kubernetes/pki/ca.crt \
+  https://127.0.0.1:6443/api/v1/pods?limit=500
+
+openssl x509 -in /tmp/cert.crt -text
+
+# Consultando Usando Rotas anonimas
+curl -k https://127.0.0.1:6443/version
+curl -k https://127.0.0.1:6443/healthz
+curl -k https://127.0.0.1:6443/livez
+curl -k https://127.0.0.1:6443/readyz
+
+# Check Cluster aceita rotas anonimas
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep anonymous
+
+# List Pods
 k get pod
 
 # Lista todos Namespaces
