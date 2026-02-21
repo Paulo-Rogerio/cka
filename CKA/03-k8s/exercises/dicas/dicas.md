@@ -14,12 +14,15 @@ k krew install neat
 k krew list
 ```
 
-#### Com esse plugin consigo extrair o manifesto yaml de um pod em execução , sendo que ele ja remove informações desnecessárias , metadados etc.
+# Neat
+
+Com esse plugin consigo extrair o manifesto yaml de um pod em execução, sendo que ele ja remove informações desnecessárias, metadados como timestamp entre outros.
 
 ```bash
 k neat <<< $(k get pods -n kube-system metrics-server-755bdffd6c-trrcm -o yaml)
-k neat <<< $(k get pods -n kube-system metrics-server-755bdffd6c-trrcm -o yaml) > /tmp/study-k8s/nginx-extract.yaml
+k neat <<< $(k get pods -n kube-system metrics-server-755bdffd6c-trrcm -o yaml) > /tmp/metric-server.yaml
 ```
 
 # Sniff
+
 sniff ( Sobe um sidecar e funciona como um tcpdump )

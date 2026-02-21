@@ -159,6 +159,104 @@ k patch svc demo -p '{"spec":{"ports":[{"port":80,"targetPort":80,"nodePort":300
 # - --service-node-port-range=20000-40000
 ```
 
+# 🚀 Create Object - StaticPod
+
+```bash
+
+# Todos os pod que contem manifesto yaml nesse path é um staticPod
+ls /etc/kubernetes/manifests/
+
+# Static Pods , não é gerido pelo scheduler ( api server ), pois isso aqui é um processo exclusivo do kubelet
+# O kubelete ( componete que roda no node ) é o piloto que comanda eles.
+
+systemctl list-units --type=service --state=active
+systemctl status kubelet
+
+# O kubelete foi programado para ler qualquer manifesto existente em /etc/kubernetes/manifests
+# Observer que nos workers ( trabalhadores ), esse diretório é vazio.
+
+# Se colocarmos qualquer manifesto dentro desse diretorio do worker , ele iniciará imediatamente
+# Se tentar matar ele é recriado
+
+# Usando especificamente pelo controlplane. Por ser estático dentro do worker , NÃO É ESCALAVEL.
+```
+
+# 🚀 Create Object - Init Containers
+
+```bash
+
+# O que são os init Containers?
+# Container init, não fazem parte do processo principal do pod, geralmente são ações que fazem determinadas tarefas pre-requistos ( ex: clonar um repo ).
+
+# Como simular?
+# Essa image busybox é uma imagem que contem os binários essencias do linux , mas não é uma distro onde consegue rodar comandos do apt/yum/apk
+
+k run --image busybox --rm -it demo sh
+
+# Executa enquanto for falso
+until ping -c 1 mymysql; do echo "Trying to resolve..."; echo; sleep 1; done
+
+ping: bad address 'mymysql'
+Trying to resolve...
+
+ping: bad address 'mymysql'
+Trying to resolve...
+
+ping: bad address 'mymysql'
+Trying to resolve...
+
+ping: bad address 'mymysql'
+Trying to resolve...
+
+...
+...
+
+PING mymysql (10.97.106.196): 56 data bytes
+
+# Crie o service em outro TTY
+# Apos essa ação o script acima comeca a responder.
+
+k create service clusterip mymysql --tcp=80:80
+k delete svc mymysql
+
+
+# Aplicando ...
+
+cat <<EOF | k apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+  initContainers:
+  - name: waitfordns
+    image: busybox
+    command: [ "/bin/sh", "-c", "--" ]
+    args: [ "until ping -c 1 mymysql; do echo 'Trying to resolve...'; echo; sleep 1; done" ]
+    args: [ "echo 'Clone repo....'; sleep 40;" ]
+EOF
+
+# Posso ter varios init containers, e somente quando ele finalizar ( passar ), é que o container real da aplicação será executado.
+
+k get pods
+nginx   0/1     Init:0/1   0          25s
+
+k logs nginx
+Defaulted container "nginx" out of: nginx, waitfordns (init)
+Error from server (BadRequest): container "nginx" in pod "nginx" is waiting to start: PodInitializing
+
+# Nesse contexto é criado 2 containers no mesmo pod ( nginx => aplicação e waitfordns que é meu pre-deploy )
+# Para mim ler os logs desse "pre-deploy" chamado waitfordns
+
+k logs nginx -c waitfordns -f
+Clone repo....
+```
+
 # 🚀 Create Object - Replace Entrypoint
 
 ```bash
@@ -225,6 +323,32 @@ k neat <<< $(k create ns familia --dry-run=client -o yaml)
 # 🚀 Create Object - Deployment
 
 ```bash
+k create deployment --image=nginx nginx-paulo
+
+k neat <<< $(k get deployment nginx-paulo -o yaml)
+
+# O deployment garante que o pod seja recriado, mesmo que Pod seja deletado.
+k delete pod nginx-paulo-5b98995fcc-25zj6
+
+k delete deployment nginx-paulo
+
+# Isso aqui é mais limpo
+k neat <<< $(k create deployment --image=nginx nginx-paulo --replicas=2 --dry-run=client -o yaml)
+k neat <<< $(k create deployment --image=nginx nginx-paulo --dry-run=client -o yaml) | k apply -f
+```
+
+# 🚀 Create Object - Statefullset
+
+```bash
+Statefullset => Aplicação statefull ( A escalada tem que ser mais caltelosa ,
+cada pod tem seu volume, escala na ordem certa Ex: Banco de Dados )
+
+Daemonset    => 1 Pod em cada Node ( Geralmente coletrores de logs )
+```
+
+# 🚀 Estratégias Deployment
+
+```bash
 Deployment   => Aplicação stateless ( Aplicação escaláveis )
 
                            -----------
@@ -242,13 +366,17 @@ Deployment   => Aplicação stateless ( Aplicação escaláveis )
            |    |   |       |   |   |      |   |    |
          Pod1 Pod2 Pod3   Pod1 Pod2 Pod3  Pod1 Pod2 Pod3
 
-```
+# Como Deployment interagi com os replicaset?
+O deployments orquestra os replicaset, e são os replicaset que cria os pods. Os Replicaset defini a quantidade de replicas que estaram rodando.
 
-# 🚀 Create Object - Deployment
+# O que é um Rolling Update?
+E um termo usado quando vou atualizar meus produtos ( pods ). Ex: Meu manifesto ( Deployment )
 
-```bash
-Statefullset => Aplicação statefull ( A escalada tem que ser mais caltelosa ,
-cada pod tem seu volume, escala na ordem certa Ex: Banco de Dados )
+O Deployment cria 1 replicaset com 3 pods, agora preciso trocar a imagem do manifesto.
 
-Daemonset    => 1 Pod em cada Node ( Geralmente coletrores de logs )
+Ao aplicar o deployment irá criará outro replicaset ( replicaset2 ) com 3 novos Pods isso acontece de forma gradativa.
+
+Existe outras formas de deploy Ex: canary, mas nesse formato ( rolling Update ) o Replicaset1 remove (-) um pod a medida que o Replicaset2 adiciona (+) um pod.
+
+Isso permite eu fazer um UNDO para outro replicaset
 ```
