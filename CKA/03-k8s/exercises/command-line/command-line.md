@@ -89,8 +89,8 @@ k get pod
 k get pod -A
 
 # Pegando Por tipo
-k get pod -n ingress-nginx ingress-nginx-controller-5f4f4d9787-d6h9s -o json
-k get pod -n ingress-nginx ingress-nginx-controller-5f4f4d9787-d6h9s -o yaml
+kubectl get pods -n kube-system etcd-master01 -o json
+kubectl get pods -n kube-system etcd-master01 -o yaml
 
 k get pod -A --show-labels
 k get pod -n kube-system etcd-master01
@@ -114,9 +114,13 @@ k logs pod -n kube-system etcd-master01
 k exec -it -n <namespace> <pod> -- bash
 k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash
 k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash -c "pwd; ls"
+
 ```
 
-# 🚀 Create Object
+# 🚀 Create Object - Pod
+
+
+Para muitos exemplos abaixo, foram usado alguns plugins, mais explicitamente o **neat**, veja o materia de [Dicas](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/exercises/dicas/dicas.md).
 
 ```bash
 
@@ -133,6 +137,53 @@ k apply -f https://<url>
 # Retorna uma lista de objetos e se eles são Globais ou vinculados a um namespace
 kubectl api-resources
 
+# Run
 # Cria o Pod , e ao ser encerrado, já o deleta
 k run <pod-name> --image=<image-name> --rm
+k run demo --image alpine --rm -it -- sh
+
+# Cria um YAML de um deploy de um Pod com um service do tipo ClusterIP
+# Por default ao explicitar o --expose, e criado apeanas Cluster IP
+k run demo --image nginx --port=80 --expose --dry-run=client -o yaml
+
+# Se quiser criar service to tipo NodePort?
+# Apos criado, aplicar patch para determinar uma porta alta.
+# Padrão:30000-32767
+#
+k run demo --image nginx --port=80
+k expose pod demo --port=80 --target-port=80 --type=NodePort
+k patch svc demo -p '{"spec":{"ports":[{"port":80,"targetPort":80,"nodePort":30007}]}}'
+
+# Se precisar mudar o range?
+# kubectl get pods -n kube-system kube-apiserver-master01 -o yaml
+# Adicione a entrada
+# - --service-node-port-range=20000-40000
+```
+
+# 🚀 Create Object - Namespace
+
+```bash
+cat <<EOF | k apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prgs
+EOF
+
+# É um objeto Global
+k api-resources | grep namespace
+
+# Criando via linha de comando
+k create ns familia
+
+# Caso não lembre como declarar o manifesto
+k neat <<< $(k create ns familia --dry-run=client -o yaml)
+k neat <<< $(k create ns familia --dry-run=client -o yaml) | k apply -f -
+```
+
+
+# 🚀 Create Object - Deployment
+
+```bash
+
 ```
