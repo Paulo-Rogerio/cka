@@ -237,7 +237,6 @@ spec:
   - name: waitfordns
     image: busybox
     command: [ "/bin/sh", "-c", "--" ]
-    args: [ "until ping -c 1 mymysql; do echo 'Trying to resolve...'; echo; sleep 1; done" ]
     args: [ "echo 'Clone repo....'; sleep 40;" ]
 EOF
 
