@@ -79,19 +79,20 @@ curl -k https://127.0.0.1:6443/healthz
 curl -k https://127.0.0.1:6443/livez
 curl -k https://127.0.0.1:6443/readyz
 
-# Check Cluster aceita rotas anonimas
+# Check se Cluster aceita rotas anonimas
 cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep anonymous
 
 # List Pods
 k get pod
 
-# Lista todos Namespaces
+# Lista todos pod em todos Namespaces
 k get pod -A
 
-# Pegando Por tipo
+# Extrair manifestos
 kubectl get pods -n kube-system etcd-master01 -o json
 kubectl get pods -n kube-system etcd-master01 -o yaml
 
+# Labels
 k get pod -A --show-labels
 k get pod -n kube-system etcd-master01
 k get pod -A -l <label>=<value>
@@ -107,23 +108,21 @@ k edit pod -n kube-system etcd-master01
 k describe pod -n kube-system etcd-master01
 k delete pod -n kube-system etcd-master01
 
-k logs pod -n <namespace> <pod>
-k logs pod -n kube-system etcd-master01
+# Logs
+k logs -n <namespace> <pod>
+k logs -n kube-system etcd-master01
 
 # Conectar no container
 k exec -it -n <namespace> <pod> -- bash
 k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash
 k exec -it -n kube-flannel kube-flannel-ds-77m55 -- bash -c "pwd; ls"
-
 ```
 
 # 🚀 Create Object - Pod
 
-
 Para muitos exemplos abaixo, foram usado alguns plugins, mais explicitamente o **neat**, veja o materia de [Dicas](https://github.com/Paulo-Rogerio/kubernetes-certifications/blob/main/CKA/03-k8s/exercises/dicas/dicas.md).
 
 ```bash
-
 # Criar Resources
 k apply -f <file-name.yml>
 
@@ -138,7 +137,7 @@ k apply -f https://<url>
 kubectl api-resources
 
 # Run
-# Cria o Pod , e ao ser encerrado, já o deleta
+# Cria o Pod ,e ao ser encerrado, já o deleta
 k run <pod-name> --image=<image-name> --rm
 k run demo --image alpine --rm -it -- sh
 
@@ -160,6 +159,48 @@ k patch svc demo -p '{"spec":{"ports":[{"port":80,"targetPort":80,"nodePort":300
 # - --service-node-port-range=20000-40000
 ```
 
+# 🚀 Create Object - Replace Entrypoint
+
+```bash
+# Pod irá subir e logo apos morrer, pois entrypoint espera um comando
+# Ex: terraform plan , terraform apply
+#
+k neat <<< $(k run --image hashicorp/terraform terraform --dry-run=client -o yaml) | k apply -f -
+
+# Definir sleep grande
+cat <<EOF | k apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: terraform
+  name: terraform
+spec:
+  containers:
+  - name: terraform
+    image: hashicorp/terraform
+    command:
+      - "sleep"
+      - "9999999"
+EOF
+
+# Definir While true infinito
+cat <<EOF | k apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: terraform
+  name: terraform
+spec:
+  containers:
+  - name: terraform
+    image: hashicorp/terraform
+    command: [ "/bin/sh", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+EOF
+```
+
 # 🚀 Create Object - Namespace
 
 ```bash
@@ -178,12 +219,36 @@ k create ns familia
 
 # Caso não lembre como declarar o manifesto
 k neat <<< $(k create ns familia --dry-run=client -o yaml)
-k neat <<< $(k create ns familia --dry-run=client -o yaml) | k apply -f -
+k neat <<< $(k create ns familia --dry-run=client -o yaml)
 ```
-
 
 # 🚀 Create Object - Deployment
 
 ```bash
+Deployment   => Aplicação stateless ( Aplicação escaláveis )
 
+                           -----------
+                           Deployment
+                           -----------
+                                |
+                ________________|_____________
+                |               |             |
+                |               |             |
+           ReplicaSet1     ReplicaSet2     ReplicaSet3
+                |               |             |
+                |               |             |
+          -----------------------------------------------
+           |    |   |       |   |   |      |   |    |
+           |    |   |       |   |   |      |   |    |
+         Pod1 Pod2 Pod3   Pod1 Pod2 Pod3  Pod1 Pod2 Pod3
+
+```
+
+# 🚀 Create Object - Deployment
+
+```bash
+Statefullset => Aplicação statefull ( A escalada tem que ser mais caltelosa ,
+cada pod tem seu volume, escala na ordem certa Ex: Banco de Dados )
+
+Daemonset    => 1 Pod em cada Node ( Geralmente coletrores de logs )
 ```
